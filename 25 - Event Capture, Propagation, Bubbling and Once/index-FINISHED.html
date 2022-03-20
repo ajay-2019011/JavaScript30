@@ -40,28 +40,39 @@
   }
 </style>
 
-<button></button>
+<button>Hey</button>
 <script>
-  const divs = document.querySelectorAll('div');
-  const button = document.querySelector('button');
+  //When we clicked on innermost div, we got three,two,one as output
+  //This is because whe we clicked on one
+  //We really clicked on two too, because it wraps around it
+  //We also clicked on three, body,html tags and so on
 
-  function logText(e) {
+  //document.body.addEventListener('click',logText);
+  //If we click on three, we get
+  //three,two,one,bod
+
+  const divs=document.querySelectorAll('div');
+
+  function logText(e){
     console.log(this.classList.value);
-    // e.stopPropagation(); // stop bubbling!
-    // console.log(this);
+    e.stopPropagation();
+    //It runs at the selected one and doesnt go up
+    //If capture is on that means it will go up to bottom
+    //And as propagation stops at first, only one is printed
   }
 
-  divs.forEach(div => div.addEventListener('click', logText, {
-    capture: false,
-    once: true
-  }));
-
-  button.addEventListener('click', () => {
-    console.log('Click!!!');
-  }, {
-    once: true
-  });
-
+  //We will use capture
+  //The function logText is going to run way down
+  //instead of bubble up it goes capture down
+divs.forEach(div => div.addEventListener('click',logText,{
+  capture: false,
+  once: true
+}));
+//once-can be clicked once
+const button=document.querySelector('button');
+button.addEventListener('click',()=>{
+  console.log("Clicked!!");
+},{once: true});
 </script>
 </body>
 </html>
