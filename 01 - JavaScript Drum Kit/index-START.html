@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>JS Drum Kit</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
 
@@ -47,6 +49,9 @@
     </div>
   </div>
 
+  <!-- We can create our own attribute using
+  data-attribute_name, Ex.-data-key,data-value,etc
+  -->
   <audio data-key="65" src="sounds/clap.wav"></audio>
   <audio data-key="83" src="sounds/hihat.wav"></audio>
   <audio data-key="68" src="sounds/kick.wav"></audio>
@@ -57,10 +62,64 @@
   <audio data-key="75" src="sounds/tom.wav"></audio>
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
-<script>
+  <script>
 
-</script>
+    //Attribute selector, just like in CSS
+    //audio[data-key]
+    //Now we have to check whether it is in audio
+    //We will use bacticks, not normal quotes
+    //as we are accessing value from other function arguement 
+
+    // window.addEventListener('keydown',function(e){
+    //   const audio=document.querySelector(`audio[data-key="${e.keyCode}"]`);
+    //   const key=document.querySelector(`.key[data-key="${e.keyCode}"]`);
+    //   if(!audio) 
+    //     return;
+    //     //Stop the function from running altogether
+    //   //rewind to the start, multiple times same key pressing
+    //   audio.currentTime=0; 
+    //   audio.play();
+    //   key.classList.add('playing');
+    // }); THIS IS SAME AS BELOW - SEPARATE FUNCTION DECLARED
+
+    // WE placed th keydown eventlistner at last because
+    //We can now playsound based on any event other than keydown 
+
+    function playSound(e) {
+      const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+      const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+      if (!audio)
+        return;
+      //Stop the function from running altogether
+      //rewind to the start, multiple times same key pressing
+      audio.currentTime = 0;
+      audio.play();
+      key.classList.add('playing');
+    }
+
+
+    //It takes arguement as e
+    //2nd arguement of addEventListener always passes e-event
+    function removeTransition(e) {
+      if (e.propertyName !== "transform") return;
+      //skip if its not a transform
+      //this here will give 'key'
+      this.classList.remove('playing');
+    }
+
+    //We could also use setTimeOut func. , 
+    //but that increases complexity
+    //We will use transition end for each key
+    //removeTransition to remove 'playing' class
+
+    const keys = document.querySelectorAll('.key');
+    keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+
+    window.addEventListener('keydown', playSound);
+
+  </script>
 
 
 </body>
+
 </html>
